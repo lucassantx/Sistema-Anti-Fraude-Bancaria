@@ -1,0 +1,5 @@
+# Sem dependencias externas para execucao.
+# Somente stdlib do Python 3.8+
+#
+# Para geracao de dados (opcional):
+# faker>=18.0.0

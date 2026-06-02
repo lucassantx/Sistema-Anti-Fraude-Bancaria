@@ -1,0 +1,15 @@
+{
+  "contas": ["CPF001", "CPF002", "CPF003", "CPF004", "CPF005"],
+  "transacoes": [
+    { "de": "CPF001", "para": "CPF002", "valor": 1000.00, "timestamp": 0 },
+    { "de": "CPF002", "para": "CPF003", "valor": 950.00,  "timestamp": 3600 },
+    { "de": "CPF003", "para": "CPF001", "valor": 900.00,  "timestamp": 7200 },
+    { "de": "CPF004", "para": "CPF005", "valor": 500.00,  "timestamp": 100 }
+  ],
+  "dispositivos": [
+    { "ip": "10.0.0.1", "conta": "CPF001" },
+    { "ip": "10.0.0.1", "conta": "CPF002" },
+    { "ip": "10.0.0.2", "conta": "CPF003" }
+  ],
+  "janela_suspeita_segundos": 86400
+}

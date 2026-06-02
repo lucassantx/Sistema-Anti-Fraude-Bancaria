@@ -1,0 +1,41 @@
+{
+  "_comentario": "Edge cases: no isolado, ciclo fora da janela, IP com multiplas contas, autoloop, ciclo longo, transacao duplicada",
+  "contas": [
+    "CPF001", "CPF002", "CPF003", "CPF004", "CPF005",
+    "CPF006", "CPF007", "CPF008", "CPF009", "CPF010",
+    "CPF_ISOLADO"
+  ],
+  "transacoes": [
+    { "_edge_case": "ciclo simples suspeito (3600s < 86400s)",
+      "de": "CPF001", "para": "CPF002", "valor": 1000.00, "timestamp": 0 },
+    { "de": "CPF002", "para": "CPF003", "valor": 950.00,  "timestamp": 1800 },
+    { "de": "CPF003", "para": "CPF001", "valor": 900.00,  "timestamp": 3600 },
+
+    { "_edge_case": "ciclo fora da janela (> 86400s) — suspeito deve ser FALSE",
+      "de": "CPF004", "para": "CPF005", "valor": 200.00, "timestamp": 0 },
+    { "de": "CPF005", "para": "CPF004", "valor": 190.00, "timestamp": 172800 },
+
+    { "_edge_case": "ciclo longo A->B->C->D->E->A",
+      "de": "CPF006", "para": "CPF007", "valor": 500.00, "timestamp": 1000 },
+    { "de": "CPF007", "para": "CPF008", "valor": 490.00, "timestamp": 2000 },
+    { "de": "CPF008", "para": "CPF009", "valor": 480.00, "timestamp": 3000 },
+    { "de": "CPF009", "para": "CPF010", "valor": 470.00, "timestamp": 4000 },
+    { "de": "CPF010", "para": "CPF006", "valor": 460.00, "timestamp": 5000 },
+
+    { "_edge_case": "autoloop — conta transfere para si mesma",
+      "de": "CPF003", "para": "CPF003", "valor": 1.00, "timestamp": 9999 },
+
+    { "_edge_case": "transacao duplicada — mesmo par, mesmo timestamp",
+      "de": "CPF001", "para": "CPF002", "valor": 1000.00, "timestamp": 0 }
+  ],
+  "dispositivos": [
+    { "ip": "10.0.0.1", "conta": "CPF001" },
+    { "ip": "10.0.0.1", "conta": "CPF002" },
+    { "ip": "10.0.0.1", "conta": "CPF003" },
+    { "ip": "10.0.0.1", "conta": "CPF004" },
+    { "ip": "10.0.0.1", "conta": "CPF005" },
+    { "ip": "10.0.0.2", "conta": "CPF006" },
+    { "ip": "10.0.0.3", "conta": "CPF007" }
+  ],
+  "janela_suspeita_segundos": 86400
+}
