@@ -1,46 +1,59 @@
-# =============================================================
-# main.py — CLI principal
-# Dev 1
-# Orquestra todos os modulos. Le input.json, gera output.json.
-# Uso: python src/main.py --input <caminho> --output <caminho>
-# =============================================================
-
 import argparse
 import json
 import sys
 import os
 
-# TODO Dev 1: trocar mock_graph por graph quando pronto
 sys.path.insert(0, os.path.dirname(__file__))
-from mock_graph import Graph       # <- substituir por: from graph import Graph
+
+from graph import Graph
 from dfs_cycle import detect_cycles
 from hash_table import HashTable
 
 
 def load_input(path: str) -> dict:
-    # TODO Dev 1: ler e parsear input.json
-    # Em caso de erro: print para stderr e sys.exit(1)
-    pass
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        print(f"Erro: arquivo nao encontrado: {path}", file=sys.stderr)
+        sys.exit(1)
+    except json.JSONDecodeError as e:
+        print(f"Erro: JSON invalido: {e}", file=sys.stderr)
+        sys.exit(1)
 
 
 def build_graph(data: dict) -> Graph:
-    # TODO Dev 1: instanciar Graph, popular com contas e transacoes
-    pass
+    g = Graph()
+    for conta in data.get("contas", []):
+        g.add_node(conta)
+    for t in data.get("transacoes", []):
+        # ignorar campos extras como "_comentario" ou "_edge_case"
+        if "de" in t and "para" in t:
+            g.add_edge(t["de"], t["para"], float(t["valor"]), int(t["timestamp"]))
+    return g
 
 
 def build_hash(data: dict) -> HashTable:
-    # TODO Dev 1: instanciar HashTable, popular com dispositivos
-    pass
+    ht = HashTable()
+    for d in data.get("dispositivos", []):
+        ht.insert(d["ip"], d["conta"])
+    return ht
 
 
 def build_output(cycles: list, anomalies: list) -> dict:
-    # TODO Dev 1: montar dict de saida conforme formato em contracts.py
-    pass
+    return {
+        "ciclos_detectados": cycles,
+        "anomalias_dispositivo": anomalies
+    }
 
 
 def save_output(output: dict, path: str) -> None:
-    # TODO Dev 1: gravar output.json com indent=2
-    pass
+    try:
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(output, f, indent=2, ensure_ascii=False)
+    except OSError as e:
+        print(f"Erro ao gravar output: {e}", file=sys.stderr)
+        sys.exit(1)
 
 
 def main():
@@ -49,18 +62,15 @@ def main():
     parser.add_argument("--output", required=True, help="Caminho do output.json")
     args = parser.parse_args()
 
-    try:
-        data      = load_input(args.input)
-        graph     = build_graph(data)
-        ht        = build_hash(data)
-        cycles    = detect_cycles(graph, data["janela_suspeita_segundos"])
-        anomalies = ht.get_anomalies()
-        output    = build_output(cycles, anomalies)
-        save_output(output, args.output)
-        print(f"Output gerado: {args.output}")
-    except Exception as e:
-        print(f"Erro: {e}", file=sys.stderr)
-        sys.exit(1)
+    data      = load_input(args.input)
+    graph     = build_graph(data)
+    ht        = build_hash(data)
+    cycles    = detect_cycles(graph, data["janela_suspeita_segundos"])
+    anomalies = ht.get_anomalies()
+    output    = build_output(cycles, anomalies)
+    save_output(output, args.output)
+
+    print(f"Concluido: {args.output}")
 
 
 if __name__ == "__main__":

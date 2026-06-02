@@ -1,33 +1,22 @@
-# =============================================================
-# graph.py — RF01
-# Dev 1
-# Grafo Direcionado com Lista de Adjacencia
+# RF01 - Grafo Direcionado com Lista de Adjacencia
 # Complexidade: O(1) insert | O(V+E) traverse
-# PROIBIDO: collections.defaultdict, networkx ou qualquer lib externa
-# =============================================================
-
-# TODO Dev 1: implementar a classe Graph conforme contracts.py
-
 
 class Graph:
 
     def __init__(self):
-        # TODO: inicializar estrutura interna (dict puro, sem defaultdict)
-        pass
+        self._adj = {}
 
     def add_node(self, conta: str) -> None:
-        # TODO: adicionar no. Idempotente.
-        pass
+        if conta not in self._adj:
+            self._adj[conta] = []
 
     def add_edge(self, de: str, para: str, valor: float, timestamp: int) -> None:
-        # TODO: criar nos se nao existirem, adicionar aresta
-        pass
+        self.add_node(de)
+        self.add_node(para)
+        self._adj[de].append((para, valor, timestamp))
 
     def get_neighbors(self, conta: str) -> list:
-        # TODO: retornar list de tuplas (para, valor, timestamp)
-        # NUNCA retornar None. Retornar [] se conta nao existir.
-        pass
+        return self._adj.get(conta, [])
 
     def get_all_nodes(self) -> list:
-        # TODO: retornar lista de todas as contas
-        pass
+        return list(self._adj.keys())
