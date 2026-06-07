@@ -1,7 +1,6 @@
-```markdown
 # Sistema Anti-Fraude Bancaria — Projeto 9
 
-> Estruturas de Dados Avançada
+> Estrutura de Dados Avançada
 
 ## Membros
 
