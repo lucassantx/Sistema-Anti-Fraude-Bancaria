@@ -4,6 +4,10 @@
 # Uso: python data/generate_stress.py
 # Bibliotecas permitidas: random, json (stdlib)
 # =============================================================
+# 
+
+#    
+
 
 import random
 import json
