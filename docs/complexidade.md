@@ -20,16 +20,38 @@ V = numero de contas, E = numero de transacoes.
 
 ## RF02 — DFS para Deteccao de Ciclos
 
+**Estrutura:** DFS iterativa com pilha explicita. Tres estados por no:
+- `BRANCO (0)` — nao visitado
+- `CINZA (1)` — em progresso (esta na pilha de DFS atual)
+- `PRETO (2)` — finalizado (todos os vizinhos processados)
+
 **Complexidade de tempo:** O(V + E)  
-Cada no e visitado exatamente uma vez (transicao BRANCO -> CINZA -> PRETO).  
-Cada aresta e examinada exatamente uma vez.
+Cada no transita exatamente uma vez por BRANCO -> CINZA -> PRETO.  
+Cada aresta e examinada exatamente uma vez (cursor de indice por no na pilha).  
+A deteccao de ciclo ao encontrar um vizinho CINZA e O(1) com o dict `caminho_pos`.  
+A reconstrucao do caminho e O(L) onde L e o comprimento do ciclo — amortizado no total das arestas.
 
 **Complexidade de espaco:** O(V)  
-Dicionario de estados (V entradas) + pilha de recursao no pior caso O(V).
+- `estado`: dicionario com V entradas
+- `caminho_nos`: lista com no maximo V nos simultaneamente (profundidade da DFS)
+- `caminho_pos`: dicionario espelho de `caminho_nos`, tambem O(V)
+- `caminho_ts`: dicionario de timestamps do caminho atual, O(V)
+- `pilha`: no maximo V frames simultaneamente
+
+**Por que DFS iterativa (nao recursiva):**  
+Python tem limite de recursao padrao de 1000 chamadas. Para `input_estresse.json`
+com 50.000 nos, um caminho degenerado (lista encadeada) estouraria a pilha.
+A implementacao iterativa com pilha explicita elimina esse risco sem depender de
+`sys.setrecursionlimit`.
 
 **Por que nao busca exaustiva:**  
 Testar todos os caminhos possiveis seria O(V!) — inviavel para 50.000 nos.  
 A DFS em O(V+E) e a unica abordagem adequada para o volume exigido.
+
+**Calculo de duracao do ciclo:**  
+Para o ciclo `[A, B, C, A]` com arestas A->B (ts=t1), B->C (ts=t2), C->A (ts=t3):  
+`duracao = max(t1, t2, t3) - min(t1, t2, t3)`  
+Autoloop `[A, A]`: apenas uma aresta, `duracao = 0`.
 
 ---
 

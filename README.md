@@ -1,14 +1,14 @@
 # Sistema Anti-Fraude Bancaria — Projeto 9
 
-> Engenharia de Software — Estruturas de Dados & Algoritmos
+> Estrutura de Dados Avançada
 
 ## Membros
 
-| Dev | GitHub |
-|-----|--------|
-| Dev 1 | @— |
-| Dev 2 | @— |
-| Dev 3 | @— |
+| Nome | GitHub |
+|------|--------|
+| Lucas da Silva Santos | [@lucassantx](https://github.com/lucassantx) |
+| Pollyana de Castro Rodrigues | [@pollyanadecastro](https://github.com/pollyanadecastro) |
+| João David Salomão | [@IvK1fs](https://github.com/IvK1fs) |
 
 ## Projeto escolhido
 
@@ -47,7 +47,7 @@ python src/main.py --input data/input_estresse.json --output data/output_estress
 ```
 antifraude/
 ├── src/
-│   ├── contracts.py       # Contrato de integracao (nao alterar sem consenso)
+│   ├── contracts.py       # Contrato de integracao
 │   ├── graph.py           # RF01 — Grafo
 │   ├── dfs_cycle.py       # RF02 — DFS
 │   ├── hash_table.py      # RF03 — Hash
@@ -63,6 +63,21 @@ antifraude/
 └── README.md
 ```
 
+## Prova de Carga
+
+Teste executado com `input_estresse.json` gerado por `data/generate_stress.py`:
+
+| Métrica | Resultado |
+|---------|-----------|
+| Contas | 50.000 |
+| Transações | 200.000 |
+| Ciclos plantados | 100 |
+| Ciclos detectados | 4.055 |
+| Ciclos suspeitos | 103 |
+| Anomalias de IP detectadas | 50 |
+| Erro de memória | Nenhum |
+
 ## Documentacao tecnica
 
 Ver [`docs/complexidade.md`](docs/complexidade.md) para justificativa de complexidade assintotica de cada estrutura.
+```
